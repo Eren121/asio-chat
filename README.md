@@ -4,7 +4,7 @@ Chat application, example using network in C++.
 
 - Multiple clients, one server
 - Using [Asio](https://github.com/chriskohlhoff/asio)
-- Inspired by [this tutorial](https://dens.website/tutorials/cpp-asio)
+- Inspired by [dens' tutorial](https://dens.website/tutorials/cpp-asio)
 - Portable C++17
 - Variadic-length message
 
