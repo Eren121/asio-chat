@@ -7,7 +7,7 @@ add_library(common common/session.cpp common/sized_session.cpp)
 target_include_directories(common PUBLIC asio/asio/include)
 target_include_directories(common PUBLIC common/)
 
-add_executable(client src/client.cpp common/session.h common/session.cpp common/sized_session.cpp common/sized_session.h)
+add_executable(client src/client.cpp)
 target_link_libraries(client common)
 
 add_executable(server src/server.cpp)
