@@ -6,7 +6,7 @@ Chat application, example using network in C++.
 - Using [Asio](https://github.com/chriskohlhoff/asio)
 - Inspired by [dens' tutorial](https://dens.website/tutorials/cpp-asio)
 - Portable C++17
-- Variadic-length message
+- Variadic-length message (assume Little-Endian, which most platforms are)
 
 The console parallel read / write is handled in a different thread. There is no way in standard C++ to make it prettier without a GUI.
 
