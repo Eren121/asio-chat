@@ -10,6 +10,8 @@
 #include <queue>
 #include <string>
 
+#include "ChatMessage.pb.h"
+
 #define SERVER_LISTENING_PORT 15001
 #define MAX_STREAM_BUFFER_SIZE 65536
 
@@ -23,4 +25,9 @@ std::string join(T&&... args)
     std::ostringstream ss;
     (ss << ... << args);
     return ss.str();
+}
+
+inline std::string format_message(const proto::ChatMessage& message)
+{
+    return join("[", message.sender(), "] ", message.content());
 }

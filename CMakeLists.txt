@@ -3,9 +3,16 @@ project(Asio)
 
 set(CMAKE_CXX_STANDARD 17)
 
+add_subdirectory(src/messages)
+
 add_library(common common/session.cpp common/sized_session.cpp)
 target_include_directories(common PUBLIC asio/asio/include)
 target_include_directories(common PUBLIC common/)
+target_link_libraries(common messages)
+
+if(WIN32)
+    target_compile_definitions(common PUBLIC _WIN32_WINNT=0x0601)
+endif()
 
 add_executable(client src/client.cpp)
 target_link_libraries(client common)
@@ -17,6 +24,3 @@ target_link_libraries(server common)
 add_custom_target(both)
 add_dependencies(both client server)
 
-if(WIN32)
-    target_compile_definitions(common PUBLIC _WIN32_WINNT=0x0601)
-endif()

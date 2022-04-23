@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package proto;
+
+message ChatMessage {
+  optional string sender = 1;
+  optional bytes content = 2;
+}

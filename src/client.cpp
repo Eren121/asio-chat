@@ -3,6 +3,8 @@
 #include <atomic>
 #include <mutex>
 #include <algorithm>
+#include <google/protobuf/service.h>
+#include "ChatMessage.pb.h"
 
 // We have to type and print messages at the same time.
 // C++ I/O is blocking and we don't use GUI like Qt for simplicity,
@@ -75,6 +77,8 @@ private:
 
 int main()
 {
+    GOOGLE_PROTOBUF_VERIFY_VERSION;
+
     asio::io_context io_context;
     StdinReader reader;
     io::sized_session session(io_context);
@@ -98,12 +102,11 @@ int main()
     });
     
     session.set_on_read([&](io::sized_session&, const char* bytes, size_t count) {
-        // `bytes` may be not null-terminated
-        auto end = std::find(bytes, bytes + count, '\0');
-        std::string message(bytes, end);
-        
-        std::cout << message << std::endl;
-        
+        proto::ChatMessage message;
+        message.ParseFromArray(bytes, static_cast<int>(count));
+
+        std::cout << format_message(message) << std::endl;
+
         // Read next message async.
         session.read();
     });
@@ -125,13 +128,17 @@ int main()
             std::queue<std::string> to_send = reader.consume();
             while(!to_send.empty())
             {
-                std::string message = to_send.front();
+                std::string content = to_send.front();
                 
                 to_send.pop();
                 
-                std::cout << "send: \"" << message << "\"" << std::endl;
-                
-                session.write(message.data(), message.size());
+                std::cout << "send: \"" << content << "\"" << std::endl;
+
+                proto::ChatMessage message;
+                message.set_content(content);
+
+                std::string message_binary = message.SerializeAsString();
+                session.write(message_binary.c_str(), message_binary.size());
             }
         }
         
@@ -139,6 +146,9 @@ int main()
     }
     
     std::cout << "connection stopped." << std::endl;
-    
+
+    // Optional:  Delete all global objects allocated by libprotobuf.
+    google::protobuf::ShutdownProtobufLibrary();
+
     return 0;
 }

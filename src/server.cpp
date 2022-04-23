@@ -1,5 +1,6 @@
 #include "common.h"
 #include "sized_session.h"
+#include "ChatMessage.pb.h"
 
 class Server
 {
@@ -39,15 +40,18 @@ public:
                 m_clients.emplace(session);
                 
                 session->set_on_read([this](io::sized_session& session, const char* bytes, size_t count) {
-                    std::string message(bytes, bytes + count);
-                    message = join("[", session.remote_endpoint(), "] ", message);
+                    proto::ChatMessage message;
+                    message.ParseFromArray(bytes, static_cast<int>(count));
+                    message.set_sender(join(session.remote_endpoint()));
+
+                    std::string message_binary = message.SerializeAsString();
                     
-                    std::cout << message.c_str() << std::endl;
+                    std::cout << format_message(message) << std::endl;
                     
                     // Write back to all clients (except to the one who sent the message)
                     for(auto& client : m_clients)
                     {
-                        client->write(message.data(), message.size());
+                        client->write(message_binary.c_str(), message_binary.size());
                     }
     
                     // Read next message async.
