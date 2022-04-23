@@ -16,3 +16,7 @@ target_link_libraries(server common)
 # build automatically both
 add_custom_target(both)
 add_dependencies(both client server)
+
+if(WIN32)
+    target_compile_definitions(common PUBLIC _WIN32_WINNT=0x0601)
+endif()
