@@ -25,9 +25,7 @@ sized_session::sized_session(tcp::socket socket, size_t buffer_size)
             assert(count == sizeof(header_size_type));
             header_size_type header;
             std::copy(bytes, bytes + count, reinterpret_cast<char*>(&header));
-    
-            // BEFORE `m_session.read()`
-            // Because since we're un the run() loop already, it would infinite-loop
+
             m_in_header = false;
             
             // Finally ask to read the user-data message
