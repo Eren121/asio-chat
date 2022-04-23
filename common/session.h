@@ -17,7 +17,7 @@ namespace io
 class session
 {
 public:
-    enum { default_buffer_size = 65536 };
+    enum { max_buffer_size = 65535 };
     
     using on_read_handler = std::function<void(session&, const char* bytes, size_t count)>;
     using on_error_handler = std::function<void(session&, const std::error_code&)>;
@@ -25,8 +25,8 @@ public:
     /**
      * @param buffer_size Maximum size for write() and read().
      */
-    explicit session(asio::io_context& io_context, size_t buffer_size = default_buffer_size);
-    explicit session(tcp::socket socket, size_t buffer_size = default_buffer_size);
+    explicit session(asio::io_context& io_context, size_t buffer_size = max_buffer_size);
+    explicit session(tcp::socket socket, size_t buffer_size = max_buffer_size);
     
     tcp::endpoint remote_endpoint() const;
     tcp::endpoint local_endpoint() const;

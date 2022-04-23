@@ -17,8 +17,8 @@ public:
     using on_read_handler = std::function<void(sized_session&, const char* bytes, size_t count)>;
     using on_error_handler = std::function<void(sized_session&, const std::error_code& error)>;
     
-    explicit sized_session(asio::io_context& io_context, size_t buffer_size = session::default_buffer_size);
-    explicit sized_session(tcp::socket socket, size_t buffer_size = session::default_buffer_size);
+    explicit sized_session(asio::io_context& io_context, size_t buffer_size = session::max_buffer_size);
+    explicit sized_session(tcp::socket socket, size_t buffer_size = session::max_buffer_size);
     
     tcp::endpoint local_endpoint() const { return m_session.local_endpoint(); }
     tcp::endpoint remote_endpoint() const { return m_session.remote_endpoint(); }
