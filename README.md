@@ -7,6 +7,7 @@ Chat application, example using network in C++.
 - Inspired by [dens' tutorial](https://dens.website/tutorials/cpp-asio)
 - Portable C++17
 - Variadic-length message (assume Little-Endian, which most platforms are)
+- Uses [Protobuf](https://github.com/protocolbuffers/protobuf) for sending messages
 
 The console parallel read / write is handled in a different thread. There is no way in standard C++ to make it prettier without a GUI.
 
